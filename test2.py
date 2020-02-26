@@ -6,12 +6,8 @@ pygame.init()
 # Base
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-# Primarys
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-# Secondarys
-GREY = (127, 127, 127)
+GREEN = (0, 180, 0)
+GREY = (160, 160, 160)
 
 # Open a new window
 size = (700, 500)
