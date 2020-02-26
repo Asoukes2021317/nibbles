@@ -5,11 +5,13 @@ import random
 import pygame
 pygame.init()
 
+
 cellSize = 30
 
-screenDim = [7, 7]
+screenDim = [12, 12]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize)
 screen = pygame.display.set_mode(size)
+scoreText = ""
 
 carryOn = True
 direction = 3 # left
@@ -69,10 +71,12 @@ class Snake:
 
     def ateFruit(self):
         global points
+        global scoreText
         lastSegment = len(self.segments)-1
         self.segments.append(Square(self.segments[lastSegment].x, self.segments[lastSegment].y, self.colour))
         points += 1
-        print("Your points:", points)
+        scoreText = "Your Points: " + str(points)
+        #print("Your points:", points)
 
 #class Player:
 player = Snake(4, (160, 0, 160))
@@ -91,7 +95,7 @@ def moveFruit(self):
         else:
             done = True
 
-    player.ateFruit()
+    self.ateFruit()
     apple.x = pos[0]
     apple.y = pos[1]
 
@@ -104,6 +108,12 @@ def renderScreen():
     pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize, cellSize, cellSize))
     for segment in player.segments:
         pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize, cellSize, cellSize))
+
+
+    bestFont = pygame.font.SysFont('Comic Sans MS', 30)
+    scoring = bestFont.render(scoreText, True, (255, 255, 255))
+    screen.blit(scoring, (0, 0))
+
     pygame.display.update()
 
 def checkKeys():
