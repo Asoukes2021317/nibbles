@@ -1,16 +1,19 @@
 # This code is primarily based on my JS pacman game from highschool and https://python-forum.io/Thread-PyGame-Basic-Snake-game-using-OOP (mainly for implementation of snake/segment classes)
 import time
 import random
+from tkinter import *
 import pygame
 pygame.init()
 
-
+options = []
+bestFont = pygame.font.SysFont('Comic Sans MS', 30) 
+run = True
 cellSize = 30
 scoreHeight = 45
 screenDim = [10, 10]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
-screen = pygame.display.set_mode(size)
-scoreText = ""
+#screen = pygame.display.set_mode(size)
+#scoreText = ""
 
 carryOn = True
 direction = 3 # left
@@ -101,8 +104,10 @@ def now():
     return millis
 
 def renderScreen():
-    global scoreText
-
+    global screen
+    global bestFont
+    screen = pygame.display.set_mode(size)
+    #scoreText = ""
     screen.fill((0, 0, 0)) # base background colour of black
 
     pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
@@ -111,7 +116,6 @@ def renderScreen():
         pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
 
     pygame.draw.rect(screen, (40, 40, 40), (0, 0, screenDim[0]*cellSize, scoreHeight)) # Texts background colour
-    bestFont = pygame.font.SysFont('Comic Sans MS', 30) # Text font
     scoreText = "Your Points: " + str(points) # Text itself
     scoring = bestFont.render(scoreText, True, (255, 255, 255)) # Visual transformation of text
     screen.blit(scoring, (20, 0)) # display the text
@@ -131,7 +135,7 @@ def checkKeys():
         direction = 3
 
 def mainLoop():
-    run = True
+    global run
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -142,30 +146,63 @@ def mainLoop():
         renderScreen()
         clock.tick(60)
 
-def welcome():
-    go = True
-    global size
+def colourOps(selected):
+    global options
     global screen
+
+    opNums = 4
+    options = []
+
+    for num in range(opNums):
+        if num == selected:
+            colour = (0, 255, 0)
+        else:
+            colour = (255, 0, 0)
+        s = Square(num*35, 10, colour)
+        options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
+    pygame.display.update()
+
+def welcome():
+    global run
+    global options
+    global screen
+
+    go = True
     size = (500, 500)
     screen = pygame.display.set_mode(size)
-    screen.fill((0, 0, 0))
-    ops = []
-    opNums = 4
-    for num in range(opNums):
-        s = Square(num*35, 10, (0, 200, 0))
-        ops.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
+    screen.fill((255, 255, 0))
+    colourOps(0)
 
-    pygame.display.update()
     while go:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-                clicked_square = [op for op in ops if op.collidepoint(pos)]
-                if clicked_square == ops[0]:
+                clicked = -1
+                for i, op in enumerate(options):
+                    if op.collidepoint(pos):
+                        clicked = i
+                if clicked == 0:
+                    print("#load preset 1")
+                    colourOps(0)
+                if clicked == 1:
+                    print("#load preset 2")
+                    colourOps(1)
+                if clicked == 2:
+                    print("#load preset 3")
+                    colourOps(2)
+                if clicked == 3:
+                    print("#load custom dialog")
+                    colourOps(3)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
                     go = False
-                else:
+                elif event.key == pygame.K_KP_ENTER:
                     go = False
 
+            if event.type == pygame.QUIT:
+                run = False
+                go = False
 
 
 #def end():
