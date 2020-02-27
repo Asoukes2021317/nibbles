@@ -1,5 +1,4 @@
 # This code is primarily based on my JS pacman game from highschool and https://python-forum.io/Thread-PyGame-Basic-Snake-game-using-OOP (mainly for implementation of snake/segment classes)
-
 import time
 import random
 import pygame
@@ -7,7 +6,7 @@ pygame.init()
 
 
 cellSize = 30
-scoreHeight = 60
+scoreHeight = 45
 screenDim = [10, 10]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
 screen = pygame.display.set_mode(size)
@@ -71,11 +70,9 @@ class Snake:
 
     def ateFruit(self):
         global points
-        global scoreText
         lastSegment = len(self.segments)-1
         self.segments.append(Square(self.segments[lastSegment].x, self.segments[lastSegment].y, self.colour))
         points += 1
-        scoreText = "Your Points: " + str(points)
         #print("Your points:", points)
 
 #class Player:
@@ -104,15 +101,20 @@ def now():
     return millis
 
 def renderScreen():
-    screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize))
-    for segment in player.segments:
+    global scoreText
+
+    screen.fill((0, 0, 0)) # base background colour of black
+
+    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
+
+    for segment in player.segments: # draw each part of the snake
         pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
 
-
-    bestFont = pygame.font.SysFont('Comic Sans MS', 30)
-    scoring = bestFont.render(scoreText, True, (255, 255, 255))
-    screen.blit(scoring, (20, 0))
+    pygame.draw.rect(screen, (40, 40, 40), (0, 0, screenDim[0]*cellSize, scoreHeight)) # Texts background colour
+    bestFont = pygame.font.SysFont('Comic Sans MS', 30) # Text font
+    scoreText = "Your Points: " + str(points) # Text itself
+    scoring = bestFont.render(scoreText, True, (255, 255, 255)) # Visual transformation of text
+    screen.blit(scoring, (20, 0)) # display the text
 
     pygame.display.update()
 
@@ -136,11 +138,35 @@ def mainLoop():
                 run = False
 
         checkKeys()
-        #moveFruit()
         player.movePlayer()
         renderScreen()
-
         clock.tick(60)
+
+def welcome():
+    go = True
+    global size
+    global screen
+    size = (500, 500)
+    screen = pygame.display.set_mode(size)
+    screen.fill((0, 0, 0))
+    ops = []
+    opNums = 4
+    for num in range(opNums):
+        s = Square(num*35, 10, (0, 200, 0))
+        ops.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
+
+    pygame.display.update()
+    while go:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                clicked_square = [op for op in ops if op.collidepoint(pos)]
+                if clicked_square == ops[0]:
+                    go = False
+                else:
+                    go = False
+
+
 
 #def end():
 #stuff...
@@ -151,6 +177,7 @@ def mainLoop():
 # - - - | While Go | - - - #
 # while going:
 # readyUp() # get user to press enter when ready, maybe not need this fxn
+welcome()
 mainLoop()
 # end() ask to if want try again or not
 
