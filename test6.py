@@ -7,9 +7,9 @@ pygame.init()
 
 
 cellSize = 30
-
-screenDim = [12, 12]
-size = (screenDim[0]*cellSize, screenDim[1]*cellSize)
+scoreHeight = 60
+screenDim = [10, 10]
+size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
 screen = pygame.display.set_mode(size)
 scoreText = ""
 
@@ -105,14 +105,14 @@ def now():
 
 def renderScreen():
     screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize, cellSize, cellSize))
+    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize))
     for segment in player.segments:
-        pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize, cellSize, cellSize))
+        pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
 
 
     bestFont = pygame.font.SysFont('Comic Sans MS', 30)
     scoring = bestFont.render(scoreText, True, (255, 255, 255))
-    screen.blit(scoring, (0, 0))
+    screen.blit(scoring, (20, 0))
 
     pygame.display.update()
 
