@@ -32,7 +32,7 @@ class Snake:
         self.segments = []
         self.length = length
         self.colour = colour
-        self.pause = 300
+        self.pause = 400
         self.turn = 0
         x = int(screenDim[0]/2)
         y = int(screenDim[1]/2)
@@ -78,6 +78,7 @@ class Snake:
         lastSegment = len(self.segments)-1
         self.segments.append(Square(self.segments[lastSegment].x, self.segments[lastSegment].y, self.colour))
         points += 1
+        self.pause -= 3 # inc speed slightly
         #print("Your points:", points)
 
 
