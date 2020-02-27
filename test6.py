@@ -1,16 +1,17 @@
 # This code is primarily based on my JS pacman game from highschool and https://python-forum.io/Thread-PyGame-Basic-Snake-game-using-OOP (mainly for implementation of snake/segment classes)
 import time
 import random
-from tkinter import *
+#from tkinter import *
+import tkinter as tk
 import pygame
 pygame.init()
 
 options = []
-bestFont = pygame.font.SysFont('Comic Sans MS', 30) 
+bestFont = pygame.font.SysFont('Comic Sans MS', 30)
 run = True
 cellSize = 30
 scoreHeight = 45
-screenDim = [10, 10]
+screenDim = [12, 10]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
 #screen = pygame.display.set_mode(size)
 #scoreText = ""
@@ -70,6 +71,7 @@ class Snake:
 
             if self.segments[0].x == apple.x and self.segments[0].y == apple.y:
                 moveFruit(self)
+                self.ateFruit()
 
     def ateFruit(self):
         global points
@@ -78,16 +80,13 @@ class Snake:
         points += 1
         #print("Your points:", points)
 
-#class Player:
-player = Snake(4, (160, 0, 160))
-apple = Square(1, 1, (0, 200, 0))
 
 def moveFruit(self):
     pos = [apple.x, apple.y]
     done = False
     while not done:
         for segment in self.segments:
-            while pos[0] == segment.x and pos[1] == segment.y:
+            while (pos[0] == segment.x  and pos[1] == segment.y) or (pos[0] == -1  and pos[1] == -1):
                 pos = [random.randint(0, screenDim[0]-1), random.randint(0, screenDim[1]-1)]
                 hasRandomised = True
         if hasRandomised:
@@ -95,32 +94,12 @@ def moveFruit(self):
         else:
             done = True
 
-    self.ateFruit()
     apple.x = pos[0]
     apple.y = pos[1]
 
 def now():
     millis = int(round(time.time() * 1000))
     return millis
-
-def renderScreen():
-    global screen
-    global bestFont
-    screen = pygame.display.set_mode(size)
-    #scoreText = ""
-    screen.fill((0, 0, 0)) # base background colour of black
-
-    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
-
-    for segment in player.segments: # draw each part of the snake
-        pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
-
-    pygame.draw.rect(screen, (40, 40, 40), (0, 0, screenDim[0]*cellSize, scoreHeight)) # Texts background colour
-    scoreText = "Your Points: " + str(points) # Text itself
-    scoring = bestFont.render(scoreText, True, (255, 255, 255)) # Visual transformation of text
-    screen.blit(scoring, (20, 0)) # display the text
-
-    pygame.display.update()
 
 def checkKeys():
     global direction
@@ -136,6 +115,11 @@ def checkKeys():
 
 def mainLoop():
     global run
+    global player
+    player = Snake(4, (160, 0, 160))
+    global apple
+    apple = Square(-1, -1, (0, 200, 0))
+    moveFruit(player)
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -145,6 +129,27 @@ def mainLoop():
         player.movePlayer()
         renderScreen()
         clock.tick(60)
+
+def renderScreen():
+    global screen
+    global bestFont
+    global size
+    size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
+    screen = pygame.display.set_mode(size)
+    #scoreText = ""
+    screen.fill((0, 0, 0)) # base background colour of black
+
+    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
+
+    for segment in player.segments: # draw each part of the snake
+        pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
+
+    pygame.draw.rect(screen, (40, 40, 40), (0, 0, screenDim[0]*cellSize, scoreHeight)) # Texts background colour
+    scoreText = "Your Points: " + str(points) # Text itself
+    scoring = bestFont.render(scoreText, True, (255, 255, 255)) # Visual transformation of text
+    screen.blit(scoring, (10, 0)) # display the text
+
+    pygame.display.update()
 
 def colourOps(selected):
     global options
@@ -162,10 +167,31 @@ def colourOps(selected):
         options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
     pygame.display.update()
 
+def customOptions(): # this is very much a WIP
+    master = tk.Tk()
+    tk.Label(master, text="First Name").grid(row=0)
+    tk.Label(master, text="Last Name").grid(row=1)
+
+    e1 = tk.Entry(master)
+    e2 = tk.Entry(master)
+    e1.insert(10, "Miller")
+    e2.insert(10, "Jill")
+
+    e1.grid(row=0, column=1)
+    e2.grid(row=1, column=1)
+
+    tk.Button(master, text='Quit', command=master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)
+    # tk.Button(master, text='Show', command=show_entry_fields).grid(row=3, column=1, sticky=tk.W, pady=4)
+
+    master.mainloop()
+
+    tk.mainloop()
+
 def welcome():
     global run
     global options
     global screen
+    global screenDim
 
     go = True
     size = (500, 500)
@@ -184,15 +210,19 @@ def welcome():
                 if clicked == 0:
                     print("#load preset 1")
                     colourOps(0)
+                    screenDim = [12, 10]
                 if clicked == 1:
                     print("#load preset 2")
                     colourOps(1)
+                    screenDim = [26, 18]
                 if clicked == 2:
                     print("#load preset 3")
                     colourOps(2)
+                    screenDim = [38, 28]
                 if clicked == 3:
                     print("#load custom dialog")
                     colourOps(3)
+                    #customOptions()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
@@ -209,13 +239,11 @@ def welcome():
 #stuff...
 
 # - - - - - | Actually Start The Game | - - - - - #
-# - - - | Intro Set Go | - - - #
-# welcome() allow user to choose screen size, greeting pic
-# - - - | While Go | - - - #
-# while going:
-# readyUp() # get user to press enter when ready, maybe not need this fxn
+
 welcome()
+
 mainLoop()
+
 # end() ask to if want try again or not
 
 pygame.quit()
