@@ -32,7 +32,7 @@ class Snake:
         self.segments = []
         self.length = length
         self.colour = colour
-        self.pause = 400
+        self.pause = 320
         self.turn = 0
         x = int(screenDim[0]/2)
         y = int(screenDim[1]/2)
@@ -78,8 +78,22 @@ class Snake:
         lastSegment = len(self.segments)-1
         self.segments.append(Square(self.segments[lastSegment].x, self.segments[lastSegment].y, self.colour))
         points += 1
-        self.pause -= 3 # inc speed slightly
-        #print("Your points:", points)
+
+        # inc speed slightly
+        if points <= 8:
+            self.pause -= 5 
+        elif points <= 16:
+            self.pause -= 4
+        elif points <= 24:
+            self.pause -= 3
+        elif points <= 48:
+            self.pause -= 2
+        elif points <= 72:
+            self.pause -= 1
+        elif points%2 == 0:
+            self.pause -= 1
+
+        print("Your pause:", self.pause)
 
 
 def moveFruit(self):
@@ -105,13 +119,13 @@ def now():
 def checkKeys():
     global direction
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
+    if (keys[pygame.K_UP] or keys[pygame.K_w]) and direction != 2:
         direction = 0
-    if keys[pygame.K_RIGHT]:
+    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and direction != 3:
         direction = 1
-    if keys[pygame.K_DOWN]:
+    if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and direction != 0:
         direction = 2
-    if keys[pygame.K_LEFT]:
+    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and direction != 1:
         direction = 3
 
 def mainLoop():
@@ -164,7 +178,7 @@ def colourOps(selected):
             colour = (0, 255, 0)
         else:
             colour = (255, 0, 0)
-        s = Square(num*35, 10, colour)
+        s = Square(num*(4*cellSize)+60, 500-50, colour)
         options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
     pygame.display.update()
 
@@ -195,9 +209,27 @@ def welcome():
     global screenDim
 
     go = True
-    size = (500, 500)
+    size = (510, 500)
     screen = pygame.display.set_mode(size)
-    screen.fill((255, 255, 0))
+    screen.fill((0, 0, 0))
+
+    introText = ["Welcome to Nibble reboot!!", "in Python"]
+    for i, t in enumerate(introText):
+        intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
+        screen.blit(intro, (40, 95+i*40)) # display the text?
+
+    for i in range(4):
+        if i == 0:
+            sizeText = "Small"
+        elif i == 1:
+            sizeText = "Med."
+        elif i == 2:
+            sizeText = "Large"
+        elif i == 3:
+            sizeText = "Cust."
+        sizes = bestFont.render(sizeText, True, (255, 255, 255)) # Visual transformation of text
+        screen.blit(sizes, (i*(4*cellSize)+40, 500-95)) # display the text
+
     colourOps(0)
 
     while go:
