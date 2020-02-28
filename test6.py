@@ -50,6 +50,8 @@ class Snake:
             return False
 
     def movePlayer(self):
+        global run
+
         if self.turn < now():
             # checkKeys()
             self.turn = now()+self.pause
@@ -67,7 +69,9 @@ class Snake:
             elif direction == 3 and self.isValid(self.segments[0].x-1, self.segments[0].y):
                 self.segments[0].x -= 1
             else:
-                print("Game OVER!!!")
+                #print("Game OVER!!!")
+                #gameOver()
+                run = False
 
             if self.segments[0].x == apple.x and self.segments[0].y == apple.y:
                 moveFruit(self)
@@ -130,15 +134,22 @@ def checkKeys():
 
 def mainLoop():
     global run
+    global outer
+    global inner
+    global direction
     global player
-    player = Snake(4, (160, 0, 160))
+    player = Snake(4, (90, 0, 90))
     global apple
-    apple = Square(-1, -1, (0, 200, 0))
+    apple = Square(-1, -1, (0, 180, 0))
     moveFruit(player)
+    direction = 3
+    run = True
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                outer = False
+                inner = False
 
         checkKeys()
         player.movePlayer()
@@ -207,16 +218,18 @@ def welcome():
     global options
     global screen
     global screenDim
+    global outer
+    global inner
 
     go = True
     size = (510, 500)
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
 
-    introText = ["Welcome to Nibble reboot!!", "in Python"]
+    introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", "Press enter to begin...", "", "", "", "Choose Game Size:"]
     for i, t in enumerate(introText):
         intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(intro, (40, 95+i*40)) # display the text?
+        screen.blit(intro, (40, 35+i*40)) # display the text?
 
     for i in range(4):
         if i == 0:
@@ -266,6 +279,40 @@ def welcome():
             if event.type == pygame.QUIT:
                 run = False
                 go = False
+                outer = False
+                inner = False
+
+def gameOver():
+    global size
+    global run
+    global outer
+    global inner
+
+    exitText = ["Press:", '"Enter" to exit', '"T" to try again', '"S" to go to start']
+    for i, t in enumerate(exitText):
+        intro = bestFont.render(t, True, (0, 0, 255)) # Visual transformation of text
+        screen.blit(intro, ((size[0]-280)/2, ((size[1]-260)/2)+30+i*60)) # display the text?
+
+    pygame.display.update()
+
+    over = False
+    while not over:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                    over = True
+                    inner = False
+                    outer = False
+                elif event.key == pygame.K_t:
+                    over = True
+                    # run = True
+                elif event.key == pygame.K_s:
+                    over = True
+                    inner = False
+            if event.type == pygame.QUIT:
+                over = True
+                inner = False
+                outer = False
 
 
 #def end():
@@ -273,9 +320,15 @@ def welcome():
 
 # - - - - - | Actually Start The Game | - - - - - #
 
-welcome()
+outer = True
+while outer:
+    welcome()
+    if run:
+        inner = True
+    while inner:
+        mainLoop()
+        gameOver()
 
-mainLoop()
 
 # end() ask to if want try again or not
 
