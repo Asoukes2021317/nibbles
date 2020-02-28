@@ -271,10 +271,9 @@ def welcome():
                     #customOptions()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     go = False
-                elif event.key == pygame.K_KP_ENTER:
-                    go = False
+                    inner = True
 
             if event.type == pygame.QUIT:
                 run = False
@@ -323,8 +322,7 @@ def gameOver():
 outer = True
 while outer:
     welcome()
-    if run:
-        inner = True
+    #inner = True
     while inner:
         mainLoop()
         gameOver()
