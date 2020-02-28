@@ -194,25 +194,10 @@ def colourOps(selected):
     pygame.display.update()
 
 def customOptions(): # this is very much a WIP
-    master = tk.Tk()
-    tk.Label(master, text="First Name").grid(row=0)
-    tk.Label(master, text="Last Name").grid(row=1)
-
-    e1 = tk.Entry(master)
-    e2 = tk.Entry(master)
-    e1.insert(10, "Miller")
-    e2.insert(10, "Jill")
-
-    e1.grid(row=0, column=1)
-    e2.grid(row=1, column=1)
-
-    tk.Button(master, text='Quit', command=master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)
-    # tk.Button(master, text='Show', command=show_entry_fields).grid(row=3, column=1, sticky=tk.W, pady=4)
-
-    master.mainloop()
-
-    tk.mainloop()
-
+    print("Custom Option Activated")
+    #Ask user for width and height in pixels or cells
+    #if in pixels, translate to nearest cells rounded down, and let user know
+    #return [width, height]#in terms of cells
 def welcome():
     global run
     global options
@@ -268,7 +253,7 @@ def welcome():
                 if clicked == 3:
                     print("#load custom dialog")
                     colourOps(3)
-                    #customOptions()
+                    #screenDim = customOptions()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
