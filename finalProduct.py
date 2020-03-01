@@ -94,7 +94,6 @@ class Snake:
         elif points%2 == 0:
             self.pause -= 1
 
-        print("Your pause:", self.pause)
 
 
 def moveFruit(self):
@@ -280,7 +279,7 @@ def gameOver():
     global outer
     global inner
 
-    exitText = ["Game Over", "Press:", '"Enter" to exit', '"T" to try again', '"S" to go to start']
+    exitText = ["Score: %d" %(points), "Game Over:", '"X" to exit', '"Enter" to try again', '"R" to go to start']
     for i, t in enumerate(exitText):
         intro = bestFont.render(t, True, (180, 255, 180)) # Visual transformation of text
         screen.blit(intro, ((size[0]-260)/2, ((size[1]-260)/2)+10+i*60)) # display the text?
@@ -293,12 +292,11 @@ def gameOver():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     over = True
+                elif event.key == pygame.K_x:
+                    over = True
                     inner = False
                     outer = False
-                elif event.key == pygame.K_t:
-                    over = True
-                    # run = True
-                elif event.key == pygame.K_s:
+                elif event.key == pygame.K_r:
                     over = True
                     inner = False
             if event.type == pygame.QUIT:
@@ -310,6 +308,7 @@ def gameOver():
 # - - - - - | Actually Start The Game | - - - - - #
 
 outer = True
+inner = True
 while outer:
     welcome()
     while inner:
