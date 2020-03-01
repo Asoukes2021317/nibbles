@@ -1,8 +1,8 @@
 # This code is primarily based on my JS pacman game from highschool and https://python-forum.io/Thread-PyGame-Basic-Snake-game-using-OOP (mainly for implementation of snake/segment classes)
 import time
 import random
-#from tkinter import *
-import tkinter as tk
+# from tkinter import *
+# import tkinter as tk
 import pygame
 pygame.init()
 
@@ -136,6 +136,7 @@ def mainLoop():
     global outer
     global inner
     global direction
+    global points
     global player
     player = Snake(4, (90, 0, 90))
     global apple
@@ -143,6 +144,7 @@ def mainLoop():
     moveFruit(player)
     direction = 3
     run = True
+    points = 0
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -211,7 +213,12 @@ def welcome():
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
 
-    introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", 'Press "Enter" to begin...', "", "", "", "Choose Game Size:"]
+    # The "logo", of the program
+    pygame.draw.rect(screen, (90, 0, 90), (80, 140, cellSize*10, cellSize*4))
+    pygame.draw.rect(screen, (0, 180, 0), (110, 170, cellSize*2, cellSize*2))
+    pygame.draw.rect(screen, (0, 180, 0), (290, 170, cellSize*2, cellSize*2))
+
+    introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", "", "", 'Press "Enter" to begin...', "", "Choose Game Size:"]
     for i, t in enumerate(introText):
         intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
         screen.blit(intro, (50, 35+i*40)) # display the text?
