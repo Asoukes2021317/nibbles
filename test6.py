@@ -6,6 +6,8 @@ import tkinter as tk
 import pygame
 pygame.init()
 
+pygame.display.set_caption('Python Nibbles')
+
 options = []
 bestFont = pygame.font.SysFont('Comic Sans MS', 30)
 run = True
@@ -13,9 +15,6 @@ cellSize = 30
 scoreHeight = 45
 screenDim = [12, 10]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
-#screen = pygame.display.set_mode(size)
-#scoreText = ""
-
 carryOn = True
 direction = 3 # left
 clock = pygame.time.Clock()
@@ -181,7 +180,7 @@ def colourOps(selected):
     global options
     global screen
 
-    opNums = 4
+    opNums = 3 # was 4 to include Custom
     options = []
 
     for num in range(opNums):
@@ -189,7 +188,7 @@ def colourOps(selected):
             colour = (0, 255, 0)
         else:
             colour = (255, 0, 0)
-        s = Square(num*(4*cellSize)+60, 500-50, colour)
+        s = Square(num*(4*cellSize)+70, 500-50, colour)
         options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
     pygame.display.update()
 
@@ -198,6 +197,7 @@ def customOptions(): # this is very much a WIP
     #Ask user for width and height in pixels or cells
     #if in pixels, translate to nearest cells rounded down, and let user know
     #return [width, height]#in terms of cells
+
 def welcome():
     global run
     global options
@@ -211,12 +211,12 @@ def welcome():
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
 
-    introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", "Press enter to begin...", "", "", "", "Choose Game Size:"]
+    introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", 'Press "Enter" to begin...', "", "", "", "Choose Game Size:"]
     for i, t in enumerate(introText):
         intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(intro, (40, 35+i*40)) # display the text?
+        screen.blit(intro, (50, 35+i*40)) # display the text?
 
-    for i in range(4):
+    for i in range(3): # was range 4 to include Custom
         if i == 0:
             sizeText = "Small"
         elif i == 1:
@@ -226,9 +226,10 @@ def welcome():
         elif i == 3:
             sizeText = "Cust."
         sizes = bestFont.render(sizeText, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(sizes, (i*(4*cellSize)+40, 500-95)) # display the text
+        screen.blit(sizes, (i*(4*cellSize)+50, 500-95)) # display the text
 
     colourOps(0)
+    screenDim = [12, 10]
 
     while go:
         for event in pygame.event.get():
@@ -272,10 +273,10 @@ def gameOver():
     global outer
     global inner
 
-    exitText = ["Press:", '"Enter" to exit', '"T" to try again', '"S" to go to start']
+    exitText = ["Game Over", "Press:", '"Enter" to exit', '"T" to try again', '"S" to go to start']
     for i, t in enumerate(exitText):
         intro = bestFont.render(t, True, (0, 0, 255)) # Visual transformation of text
-        screen.blit(intro, ((size[0]-280)/2, ((size[1]-260)/2)+30+i*60)) # display the text?
+        screen.blit(intro, ((size[0]-260)/2, ((size[1]-260)/2)+10+i*60)) # display the text?
 
     pygame.display.update()
 
@@ -299,20 +300,13 @@ def gameOver():
                 outer = False
 
 
-#def end():
-#stuff...
-
 # - - - - - | Actually Start The Game | - - - - - #
 
 outer = True
 while outer:
     welcome()
-    #inner = True
     while inner:
         mainLoop()
         gameOver()
-
-
-# end() ask to if want try again or not
 
 pygame.quit()
