@@ -68,8 +68,6 @@ class Snake:
             elif direction == 3 and self.isValid(self.segments[0].x-1, self.segments[0].y):
                 self.segments[0].x -= 1
             else:
-                #print("Game OVER!!!")
-                #gameOver()
                 run = False
 
             if self.segments[0].x == apple.x and self.segments[0].y == apple.y:
@@ -84,7 +82,7 @@ class Snake:
 
         # inc speed slightly
         if points <= 8:
-            self.pause -= 5 
+            self.pause -= 5
         elif points <= 16:
             self.pause -= 4
         elif points <= 24:
@@ -102,6 +100,8 @@ class Snake:
 def moveFruit(self):
     pos = [apple.x, apple.y]
     done = False
+    hasRandomised = False
+
     while not done:
         for segment in self.segments:
             while (pos[0] == segment.x  and pos[1] == segment.y) or (pos[0] == -1  and pos[1] == -1):
@@ -213,7 +213,7 @@ def welcome():
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
 
-    # The "logo", of the program
+    # The "logo" of the program
     pygame.draw.rect(screen, (90, 0, 90), (80, 140, cellSize*10, cellSize*4))
     pygame.draw.rect(screen, (0, 180, 0), (110, 170, cellSize*2, cellSize*2))
     pygame.draw.rect(screen, (0, 180, 0), (290, 170, cellSize*2, cellSize*2))
@@ -282,7 +282,7 @@ def gameOver():
 
     exitText = ["Game Over", "Press:", '"Enter" to exit', '"T" to try again', '"S" to go to start']
     for i, t in enumerate(exitText):
-        intro = bestFont.render(t, True, (0, 0, 255)) # Visual transformation of text
+        intro = bestFont.render(t, True, (180, 255, 180)) # Visual transformation of text
         screen.blit(intro, ((size[0]-260)/2, ((size[1]-260)/2)+10+i*60)) # display the text?
 
     pygame.display.update()
