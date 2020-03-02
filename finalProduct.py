@@ -246,19 +246,15 @@ def welcome():
                     if op.collidepoint(pos):
                         clicked = i
                 if clicked == 0:
-                    print("#load preset 1")
                     colourOps(0)
                     screenDim = [12, 10]
                 if clicked == 1:
-                    print("#load preset 2")
                     colourOps(1)
                     screenDim = [26, 18]
                 if clicked == 2:
-                    print("#load preset 3")
                     colourOps(2)
                     screenDim = [38, 28]
-                if clicked == 3:
-                    print("#load custom dialog")
+                if clicked == 3: # custom dialog
                     colourOps(3)
                     #screenDim = customOptions()
 
