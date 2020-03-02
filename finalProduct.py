@@ -279,10 +279,10 @@ def gameOver():
     global outer
     global inner
 
-    exitText = ["Score: %d" %(points), "Game Over:", '"X" to exit', '"Enter" to try again', '"R" to go to start']
+    exitText = ["Points: %d" %(points), "Game Over:", '"X" to exit', '"Enter" to try again', '"R" to go to start']
     for i, t in enumerate(exitText):
         intro = bestFont.render(t, True, (180, 255, 180)) # Visual transformation of text
-        screen.blit(intro, ((size[0]-260)/2, ((size[1]-260)/2)+10+i*60)) # display the text?
+        screen.blit(intro, (int((size[0]-260)/2), int(((size[1]-260)/2)+10+i*60))) # display the text?
 
     pygame.display.update()
 
