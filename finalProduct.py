@@ -31,7 +31,7 @@ class Snake:
         self.segments = []
         self.length = length
         self.colour = colour
-        self.pause = 320
+        self.pause = 250
         self.turn = 0
         x = int(screenDim[0]/2)
         y = int(screenDim[1]/2)
@@ -139,21 +139,21 @@ def mainLoop():
     global player
     player = Snake(4, (90, 0, 90))
     global apple
-    apple = Square(-1, -1, (0, 180, 0))
+    apple = Square(-1, -1, (0, 150, 0))
     moveFruit(player)
     direction = 3
     run = True
     points = 0
     while run:
+        checkKeys()
+        player.movePlayer()
+        renderScreen()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 outer = False
                 inner = False
-
-        checkKeys()
-        player.movePlayer()
-        renderScreen()
+                pygame.quit()
         clock.tick(60)
 
 def renderScreen():
@@ -167,8 +167,11 @@ def renderScreen():
 
     pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
 
-    for segment in player.segments: # draw each part of the snake
-        pygame.draw.rect(screen, (200, 0, 200), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
+    for i, segment in enumerate(player.segments): # draw each part of the snake
+        if i == 0:
+            pygame.draw.rect(screen, (110, 0, 110), (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
+        else:
+            pygame.draw.rect(screen, segment.colour, (segment.x*cellSize, segment.y*cellSize+scoreHeight, cellSize, cellSize))
 
     pygame.draw.rect(screen, (40, 40, 40), (0, 0, screenDim[0]*cellSize, scoreHeight)) # Texts background colour
     scoreText = "Your Points: " + str(points) # Text itself
@@ -309,6 +312,7 @@ while outer:
     welcome()
     while inner:
         mainLoop()
-        gameOver()
+        if inner:
+            gameOver()
 
 pygame.quit()
