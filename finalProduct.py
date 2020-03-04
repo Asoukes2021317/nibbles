@@ -9,11 +9,12 @@ pygame.init()
 pygame.display.set_caption('Python Nibbles')
 
 options = []
-bestFont = pygame.font.SysFont('Comic Sans MS', 30)
 run = True
-cellSize = 30
-scoreHeight = 45
-screenDim = [12, 10]
+cellSize = 24
+bestFont = pygame.font.SysFont('Comic Sans MS', cellSize)
+bestFont2 = pygame.font.SysFont('Comic Sans MS', int(cellSize*0.9))
+scoreHeight = int(cellSize*1.5)
+screenDim = [0, 0]
 size = (screenDim[0]*cellSize, screenDim[1]*cellSize+scoreHeight)
 carryOn = True
 direction = 3 # left
@@ -192,7 +193,7 @@ def colourOps(selected):
             colour = (0, 255, 0)
         else:
             colour = (255, 0, 0)
-        s = Square(num*(4*cellSize)+70, 500-50, colour)
+        s = Square(num*(4*cellSize)+int(cellSize*2.5), size2[1]-int(cellSize*1.5), colour)
         options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
     pygame.display.update()
 
@@ -209,21 +210,26 @@ def welcome():
     global screenDim
     global outer
     global inner
+    global size2
+
+    small = [16, 12]
+    medium = [24, 18]
+    large = [32, 24]
 
     go = True
-    size = (510, 500)
-    screen = pygame.display.set_mode(size)
+    size2 = (16*cellSize, 16*cellSize)
+    screen = pygame.display.set_mode(size2)
     screen.fill((0, 0, 0))
 
     # The "logo" of the program
-    pygame.draw.rect(screen, (90, 0, 90), (80, 140, cellSize*10, cellSize*4))
-    pygame.draw.rect(screen, (0, 180, 0), (110, 170, cellSize*2, cellSize*2))
-    pygame.draw.rect(screen, (0, 180, 0), (290, 170, cellSize*2, cellSize*2))
+    pygame.draw.rect(screen, (90, 0, 90), (cellSize*3, int(cellSize*4.5), cellSize*10, cellSize*4))
+    pygame.draw.rect(screen, (0, 180, 0), (cellSize*4, int(cellSize*5.5), cellSize*2, cellSize*2))
+    pygame.draw.rect(screen, (0, 180, 0), (cellSize*10, int(cellSize*5.5), cellSize*2, cellSize*2))
 
     introText = ["Welcome to Nibble reboot!!", "Made in Python", "", "", "", "", 'Press "Enter" to begin...', "", "Choose Game Size:"]
     for i, t in enumerate(introText):
         intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(intro, (50, 35+i*40)) # display the text?
+        screen.blit(intro, (cellSize*2, cellSize+int(i*cellSize*1.3))) # display the text?
 
     for i in range(3): # was range 4 to include Custom
         if i == 0:
@@ -235,10 +241,10 @@ def welcome():
         elif i == 3:
             sizeText = "Cust."
         sizes = bestFont.render(sizeText, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(sizes, (i*(4*cellSize)+50, 500-95)) # display the text
+        screen.blit(sizes, (i*(4*cellSize)+cellSize*2, cellSize*13)) # display the text
 
     colourOps(0)
-    screenDim = [12, 10]
+    screenDim = small
 
     while go:
         for event in pygame.event.get():
@@ -250,13 +256,13 @@ def welcome():
                         clicked = i
                 if clicked == 0:
                     colourOps(0)
-                    screenDim = [12, 10]
+                    screenDim = small
                 if clicked == 1:
                     colourOps(1)
-                    screenDim = [26, 18]
+                    screenDim = medium
                 if clicked == 2:
                     colourOps(2)
-                    screenDim = [38, 28]
+                    screenDim = large
                 if clicked == 3: # custom dialog
                     colourOps(3)
                     #screenDim = customOptions()
@@ -278,10 +284,10 @@ def gameOver():
     global outer
     global inner
 
-    exitText = ["Points: %d" %(points), "Game Over:", '"X" to exit', '"Enter" to try again', '"R" to go to start']
+    exitText = ["Game Over, you got %d points!" %(points), '"X" to exit', '"Enter" to try again', '"R" to go to start']
     for i, t in enumerate(exitText):
-        intro = bestFont.render(t, True, (180, 255, 180)) # Visual transformation of text
-        screen.blit(intro, (int((size[0]-260)/2), int(((size[1]-260)/2)+10+i*60))) # display the text?
+        text = bestFont2.render(t, True, (255, 255, 255)) # Visual transformation of text
+        screen.blit(text, (int((size[0]-cellSize*12)/2), int(cellSize*3+i*cellSize+cellSize*0.3))) # display the text?
 
     pygame.display.update()
 
