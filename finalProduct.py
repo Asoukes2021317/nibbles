@@ -287,7 +287,7 @@ def gameOver():
     exitText = ["Game Over, you got %d points!" %(points), '"X" to exit', '"Enter" to try again', '"R" to go to start']
     for i, t in enumerate(exitText):
         text = bestFont2.render(t, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(text, (int((size[0]-cellSize*12)/2), int(cellSize*3+i*cellSize+cellSize*0.3))) # display the text?
+        screen.blit(text, (int((size[0]-cellSize*12)/2), int(cellSize*2.5+i*cellSize))) # display the text?
 
     pygame.display.update()
 
