@@ -112,9 +112,10 @@ class getHighscore():
         #self.warning.set("")
         self.warningLabel = Label(self.tkWin, textvariable=self.warning).grid(row=2, column=1)
         self.tkWin.lift()
+        self.tkWin.bind('<Return>', self.doThing)
         self.tkWin.mainloop()
 
-    def doThing(self):
+    def doThing(self, event=None):
         global theName
         thisName = self.name.get().lower()
         length = len(thisName)
@@ -195,7 +196,9 @@ def renderScreen():
     #scoreText = ""
     screen.fill((0, 0, 0)) # base background colour of black
 
-    pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
+    # pygame.draw.circle(screen, apple.colour, (apple.x*cellSize+int(cellSize/2), apple.y*cellSize+scoreHeight+int(cellSize/2)), int(cellSize/2)) # draw the "apple"
+    pygame.draw.ellipse(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
+    # pygame.draw.rect(screen, apple.colour, (apple.x*cellSize, apple.y*cellSize+scoreHeight, cellSize, cellSize)) # draw the "apple"
 
     for i, segment in enumerate(player.segments): # draw each part of the snake
         if i == 0:
