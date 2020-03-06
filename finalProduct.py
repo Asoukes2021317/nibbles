@@ -99,6 +99,31 @@ class Snake:
         elif points%2 == 0:
             self.pause -= 1
 
+class getHighscore():
+    def __init__(self):
+        self.tkWin = Tk()
+        self.tkWin.geometry('250x60')
+        self.tkWin.title('Highscore!')
+        self.nameLabel = Label(self.tkWin, text="Your Name").grid(row=0, column=0)
+        self.name = StringVar()
+        self.nameEntry = Entry(self.tkWin, textvariable=self.name).grid(row=0, column=1)
+        self.sendButton = Button(self.tkWin, text="Done", command=self.doThing).grid(row=2, column=0)
+        self.warning = StringVar()
+        #self.warning.set("")
+        self.warningLabel = Label(self.tkWin, textvariable=self.warning).grid(row=2, column=1)
+        self.tkWin.lift()
+        self.tkWin.mainloop()
+
+    def doThing(self):
+        global theName
+        thisName = self.name.get().lower()
+        length = len(thisName)
+        if 2 <= length <= 9:
+            theName = thisName
+            self.tkWin.destroy()
+        else:
+            self.warning.set("Name must be 2-10 chars")
+        return
 
 
 def moveFruit(self):
@@ -308,33 +333,6 @@ def welcome():
                 outer = False
                 inner = False
 
-class Test():
-    def __init__(self):
-        self.tkWin = Tk()
-        self.tkWin.geometry('250x60')
-        self.tkWin.title('Highscore!')
-        self.nameLabel = Label(self.tkWin, text="Your Name").grid(row=0, column=0)
-        self.name = StringVar()
-        self.nameEntry = Entry(self.tkWin, textvariable=self.name).grid(row=0, column=1)
-        self.sendButton = Button(self.tkWin, text="Done", command=self.doThing).grid(row=2, column=0)
-        self.warning = StringVar()
-        #self.warning.set("")
-        self.warningLabel = Label(self.tkWin, textvariable=self.warning).grid(row=2, column=1)
-        self.tkWin.lift()
-        self.tkWin.mainloop()
-
-    def doThing(self):
-        global theName
-        thisName = self.name.get().lower()
-        length = len(thisName)
-        if 2 <= length <= 9:
-            theName = thisName
-            self.tkWin.destroy()
-        else:
-            self.warning.set("Name must be 2-10 chars")
-        return
-
-
 def gameOver():
     global size
     global run
@@ -346,23 +344,20 @@ def gameOver():
 
     for i, scorer in enumerate(theBoard):
         if points > int(scorer[0]):
-            Test()
-            playerName = theName#getPlayerName()
-            # playerName = "test1"
+            getHighscore()
+            playerName = theName
             theBoard.insert(i, [str(points), playerName])
             if len(theBoard) > 10:
                 theBoard.pop()
             added = True
             break
     if not added and len(theBoard) < 10:
-        Test()
-        playerName = theName#getPlayerName()
-        # playerName = "test2"
+        getHighscore()
+        playerName = theName
         theBoard.insert(len(theBoard), [str(points), playerName])
     if len(theBoard) == 0:
-        Test()
-        playerName = theName#getPlayerName()
-        # playerName = "test3"
+        getHighscore()
+        playerName = theName
         theBoard.insert(0, [str(points), playerName])
     print(theBoard)
 
