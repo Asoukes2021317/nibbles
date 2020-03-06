@@ -308,39 +308,6 @@ def welcome():
                 outer = False
                 inner = False
 
-def checkName():
-    global tkWin
-    global name
-    global theName
-    global warningLabel
-
-    length = len(name.get())
-    if 2 <= length <= 9:
-        theName = name.get().lower()
-        tkWin.destroy()
-    else:
-        warningLabel["text"]="Name must be 2-10 chars"
-    return
-
-def getPlayerName():
-    global name
-    global tkWin
-    global theName
-    global warningLabel
-
-    tkWin = Tk()
-    tkWin.geometry('250x60')
-    tkWin.title('Highscore!')
-    nameLabel = Label(tkWin, text="Your Name").grid(row=0, column=0)
-    name = StringVar()
-    nameEntry = Entry(tkWin, textvariable=name).grid(row=0, column=1)
-    sendButton = Button(tkWin, text="Done", command=checkName).grid(row=2, column=0)
-    warningLabel = Label(tkWin, text="test").grid(row=2, column=1)
-    tkWin.lift()
-    tkWin.mainloop()
-
-    return theName
-
 class Test():
     def __init__(self):
         self.tkWin = Tk()
@@ -351,17 +318,15 @@ class Test():
         self.nameEntry = Entry(self.tkWin, textvariable=self.name).grid(row=0, column=1)
         self.sendButton = Button(self.tkWin, text="Done", command=self.doThing).grid(row=2, column=0)
         self.warning = StringVar()
-        self.warning.set("test")
+        #self.warning.set("")
         self.warningLabel = Label(self.tkWin, textvariable=self.warning).grid(row=2, column=1)
         self.tkWin.lift()
         self.tkWin.mainloop()
 
     def doThing(self):
         global theName
-        length = len(self.name.get())
-        thisName = str(self.name.get())
-        print(thisName)
-        print(length)
+        thisName = self.name.get().lower()
+        length = len(thisName)
         if 2 <= length <= 9:
             theName = thisName
             self.tkWin.destroy()
@@ -376,12 +341,13 @@ def gameOver():
     global outer
     global inner
     global theBoard
-
+    global theName
     added = False
 
     for i, scorer in enumerate(theBoard):
         if points > int(scorer[0]):
-            playerName = Test()#getPlayerName()
+            Test()
+            playerName = theName#getPlayerName()
             # playerName = "test1"
             theBoard.insert(i, [str(points), playerName])
             if len(theBoard) > 10:
@@ -389,11 +355,13 @@ def gameOver():
             added = True
             break
     if not added and len(theBoard) < 10:
-        playerName = Test()#getPlayerName()
+        Test()
+        playerName = theName#getPlayerName()
         # playerName = "test2"
         theBoard.insert(len(theBoard), [str(points), playerName])
     if len(theBoard) == 0:
-        playerName = Test()#getPlayerName()
+        Test()
+        playerName = theName#getPlayerName()
         # playerName = "test3"
         theBoard.insert(0, [str(points), playerName])
     print(theBoard)
