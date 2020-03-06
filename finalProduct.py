@@ -3,13 +3,11 @@ import time
 import random
 import csv
 
-import tkinter as tk
 from tkinter import *
 import pygame
 pygame.init()
 
 pygame.display.set_caption('Python Nibbles')
-
 options = []
 run = True
 cellSize = 24
@@ -50,8 +48,7 @@ class Snake:
                 if theX == self.segments[seggy].x and theY == self.segments[seggy].y:
                     return False
             return True
-        else:
-            return False
+        return False
 
     def movePlayer(self):
         global run
