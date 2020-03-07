@@ -228,8 +228,8 @@ def colourOps(selected):
         options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
     pygame.display.update()
 
-def customOptions(): # this is very much a WIP
-    print("Custom Option Activated")
+# def customOptions(): # this is very much a WIP
+    # print("Custom Option Activated")
     #Ask user for width and height in pixels or cells
     #if in pixels, translate to nearest cells rounded down, and let user know
     #return [width, height]#in terms of cells
@@ -361,7 +361,7 @@ def gameOver():
         getHighscore()
         playerName = theName
         theBoard.insert(0, [str(points), playerName])
-    print(theBoard)
+    # print(theBoard)
 
     # CSV Stuffs
     header = ["Score", "Name"]
