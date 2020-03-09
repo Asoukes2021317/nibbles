@@ -411,14 +411,17 @@ def gameOver():
 
 
 # - - - - - | Actually Start The Game | - - - - - #
+def Main():
+    outer = True
+    inner = True
+    while outer:
+        welcome()
+        while inner:
+            mainLoop()
+            if inner:
+                gameOver()
 
-outer = True
-inner = True
-while outer:
-    welcome()
-    while inner:
-        mainLoop()
-        if inner:
-            gameOver()
+    pygame.quit()
 
-pygame.quit()
+if __name__ == "__main__":
+    Main()

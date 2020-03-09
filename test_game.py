@@ -7,7 +7,7 @@ def test_snake_isValid():
 def test_snake_ateFruit():
     player = gm.Snake(4, (90, 0, 90))
     player.ateFruit()
-    assert player.pause == 315
+    assert player.pause == 245
 
 def test_moveFruit():
     player2 = gm.Snake(4, (90, 0, 90))
