@@ -412,6 +412,8 @@ def gameOver():
 
 # - - - - - | Actually Start The Game | - - - - - #
 def Main():
+    global outer
+    global inner
     outer = True
     inner = True
     while outer:
