@@ -11,6 +11,8 @@ pygame.display.set_caption('Python Nibbles')
 options = []
 run = True
 cellSize = 24
+cellSize2 = cellSize
+bestFont0 = pygame.font.SysFont('Comic Sans MS', cellSize)
 bestFont = pygame.font.SysFont('Comic Sans MS', cellSize)
 bestFont2 = pygame.font.SysFont('Comic Sans MS', int(cellSize*0.9))
 bestFont3 = pygame.font.SysFont('Comic Sans MS', int(cellSize*0.7))
@@ -125,6 +127,34 @@ class getHighscore():
             self.warning.set("Name must be 2-10 chars")
         return
 
+class changeCellsize():
+    def __init__(self):
+        global cellSize2
+        self.tkWin = Tk()
+        self.tkWin.geometry('250x60')
+        self.tkWin.title('Cellsize!')
+        self.nameLabel = Label(self.tkWin, text="New size (original is %d)" %(cellSize2)).grid(row=0, column=0)
+        self.name = StringVar()
+        self.nameEntry = Entry(self.tkWin, textvariable=self.name)
+        self.nameEntry.grid(row=0, column=1)
+        self.nameEntry.focus_set()
+        self.sendButton = Button(self.tkWin, text="Done", command=self.doThing).grid(row=2, column=0)
+        self.warning = StringVar()
+        self.warningLabel = Label(self.tkWin, textvariable=self.warning).grid(row=2, column=1)
+        self.tkWin.lift()
+        self.tkWin.bind('<Return>', self.doThing)
+        self.tkWin.mainloop()
+
+    def doThing(self, event=None):
+        global cellSize
+        thisSize = int(self.name.get())
+        if 9 <= thisSize <= 50:
+            cellSize = thisSize
+            self.tkWin.destroy()
+        else:
+            self.warning.set("Size must be 9-50!")
+        return
+
 
 def moveFruit(self):
     pos = [apple.x, apple.y]
@@ -224,8 +254,11 @@ def colourOps(selected):
             colour = (0, 255, 0)
         else:
             colour = (255, 0, 0)
-        s = Square(num*(4*cellSize)+int(cellSize*2.5), size2[1]-int(cellSize*1.5), colour)
-        options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize, cellSize)))
+        s = Square(num*(4*cellSize2)+int(cellSize2*2.5), size2[1]-int(cellSize2*1.5), colour)
+        options.append(pygame.draw.rect(screen, s.colour, (s.x, s.y, cellSize2, cellSize2)))
+
+    options.append(pygame.draw.rect(screen, (0, 180, 0), (cellSize2*9, int(cellSize2*5.5), cellSize2*2, cellSize2*2))) # square 2 in the logo
+
     pygame.display.update()
 
 # def customOptions(): # this is very much a WIP
@@ -244,24 +277,29 @@ def welcome():
     global size2
     global theBoard
 
+    global bestFont
+    global bestFont2
+    global bestFont3
+    global scoreHeight
+
     small = [16, 12]
     medium = [24, 18]
     large = [32, 24]
 
     go = True
-    size2 = (28*cellSize, 16*cellSize)
+    size2 = (28*cellSize2, 16*cellSize2)
     screen = pygame.display.set_mode(size2)
     screen.fill((0, 0, 0))
 
     # The "logo" of the program
-    pygame.draw.rect(screen, (90, 0, 90), (cellSize*2, int(cellSize*4.5), cellSize*10, cellSize*4))
-    pygame.draw.rect(screen, (0, 180, 0), (cellSize*3, int(cellSize*5.5), cellSize*2, cellSize*2))
-    pygame.draw.rect(screen, (0, 180, 0), (cellSize*9, int(cellSize*5.5), cellSize*2, cellSize*2))
+    pygame.draw.rect(screen, (90, 0, 90), (cellSize2*2, int(cellSize2*4.5), cellSize2*10, cellSize2*4))
+    pygame.draw.rect(screen, (0, 180, 0), (cellSize2*3, int(cellSize2*5.5), cellSize2*2, cellSize2*2))
+    # the second little square is added as part of the colourOps
 
     introText = ["Nibble reboot!!", "Made in Python", "", "", "", "", 'Press "Enter" to begin...', "", "Choose Game Size:"]
     for i, t in enumerate(introText):
-        intro = bestFont.render(t, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(intro, (cellSize*2, cellSize+int(i*cellSize*1.3))) # display the text?
+        intro = bestFont0.render(t, True, (255, 255, 255)) # Visual transformation of text
+        screen.blit(intro, (cellSize2*2, cellSize2+int(i*cellSize2*1.3))) # display the text?
 
     for i in range(3): # was range 4 to include Custom
         if i == 0:
@@ -272,8 +310,8 @@ def welcome():
             sizeText = "Large"
         elif i == 3:
             sizeText = "Cust."
-        sizes = bestFont.render(sizeText, True, (255, 255, 255)) # Visual transformation of text
-        screen.blit(sizes, (i*(4*cellSize)+cellSize*2, cellSize*13)) # display the text
+        sizes = bestFont0.render(sizeText, True, (255, 255, 255)) # Visual transformation of text
+        screen.blit(sizes, (i*(4*cellSize2)+cellSize2*2, cellSize2*13)) # display the text
 
     #get leaderboard using: https://stackoverflow.com/a/11350095 and https://stackoverflow.com/a/24662707
     fname = "leaderboard.csv"
@@ -290,15 +328,15 @@ def welcome():
 
     #actually display leaderboard
     if theBoard != []:
-        lead = bestFont.render("Leaderboard:", True, (255, 255, 255))
-        screen.blit(lead, (cellSize*15, int(cellSize*0.5)))
+        lead = bestFont0.render("Leaderboard:", True, (255, 255, 255))
+        screen.blit(lead, (cellSize2*15, int(cellSize2*0.5)))
         for i, score in enumerate(theBoard):
             theScoreText = "%d | %s | %s pts" %(i+1, score[1], score[0])
-            theScore = bestFont.render(theScoreText, True, (255, 255, 255))
-            screen.blit(theScore, (cellSize*15, cellSize+int((i+1)*cellSize*1.3)))
+            theScore = bestFont0.render(theScoreText, True, (255, 255, 255))
+            screen.blit(theScore, (cellSize2*15, cellSize2+int((i+1)*cellSize2*1.3)))
     else:
-        lead = bestFont.render("No Leaderboard Data", True, (255, 255, 255))
-        screen.blit(lead, (cellSize*15, cellSize*4))
+        lead = bestFont0.render("No Leaderboard Data", True, (255, 255, 255))
+        screen.blit(lead, (cellSize2*15, cellSize2*4))
 
     colourOps(0)
     screenDim = small
@@ -320,9 +358,12 @@ def welcome():
                 if clicked == 2:
                     colourOps(2)
                     screenDim = large
-                if clicked == 3: # custom dialog
-                    colourOps(3)
-                    #screenDim = customOptions()
+                if clicked == 3: # change cellsize
+                    changeCellsize()
+                    bestFont = pygame.font.SysFont('Comic Sans MS', cellSize)
+                    bestFont2 = pygame.font.SysFont('Comic Sans MS', int(cellSize*0.9))
+                    bestFont3 = pygame.font.SysFont('Comic Sans MS', int(cellSize*0.7))
+                    scoreHeight = int(cellSize*1.5)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
